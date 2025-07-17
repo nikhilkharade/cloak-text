@@ -54,7 +54,7 @@ Visit the live application at: [Your deployed URL here]
    ```
 
 4. **Open in browser**
-   Navigate to `http://localhost:5173`
+   Navigate to `http://localhost:3000` (or the port shown in terminal)
 
 ## 📝 Usage Examples
 
@@ -113,9 +113,10 @@ or call me at [PHONE]. My address is [ADDRESS].
 
 ## 🛠 Technical Stack
 
-- **Frontend**: Vue 3 with Composition API
+- **Frontend**: Vue 3 with Composition API + TypeScript
 - **Build Tool**: Vite for fast development and optimized builds
 - **Styling**: TailwindCSS for modern, responsive design
+- **Type Safety**: Comprehensive TypeScript interfaces and strict type checking
 - **Architecture**: Modular composables for clean separation of concerns
 - **Privacy**: 100% client-side processing - no data leaves your device
 
@@ -123,16 +124,19 @@ or call me at [PHONE]. My address is [ADDRESS].
 
 ```
 src/
-├── App.vue                     # Main application component
-├── main.js                     # Application entry point
-├── style.css                   # Global styles and TailwindCSS
+├── App.vue                          # Main application component
+├── main.ts                          # Application entry point (TypeScript)
+├── style.css                        # Global styles and TailwindCSS
+├── types/
+│   └── index.ts                     # TypeScript type definitions
 ├── composables/
-│   ├── useDataMasking.js       # Core masking logic
-│   ├── usePIIDetector.js       # Pattern detection engine
-│   ├── useInputDetection.js    # Format detection and validation
-│   └── useMessageStyling.js    # Dynamic UI feedback
-└── utils/
-    └── replacements.js         # Masking strategies and patterns
+│   ├── useDataMasking.ts            # Core masking logic (TypeScript)
+│   ├── usePIIDetector.ts            # Pattern detection engine (TypeScript)
+│   ├── useInputDetection.ts         # Format detection and validation (TypeScript)
+│   └── useMessageStyling.ts         # Dynamic UI feedback (TypeScript)
+├── utils/
+│   └── replacements.ts              # Masking strategies and patterns (TypeScript)
+└── vite-env.d.ts                    # Vue component type declarations
 ```
 
 ## 🔒 Privacy & Security
@@ -152,6 +156,22 @@ src/
 | **Government** | SSN, PAN numbers, License plates |
 | **Technical** | IP addresses, MAC addresses, API keys, JWT tokens |
 | **Documents** | URLs, File paths |
+
+## 🔧 Development Commands
+
+```bash
+# Start development server with hot reload
+npm run dev
+
+# Type check without emitting files
+npm run type-check
+
+# Build for production with type checking
+npm run build
+
+# Preview production build
+npm run preview
+```
 
 ## 🤝 Contributing
 
@@ -191,7 +211,11 @@ The built files in `dist/` can be deployed to any static hosting service:
 - AWS S3
 - Firebase Hosting
 
+## 📞 Support
 
+- **Issues**: [GitHub Issues](https://github.com/nikhilkharade/cloak-text/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/nikhilkharade/cloak-text/discussions)
+- **Email**: [your-email@domain.com]
 
 ---
 
