@@ -1,15 +1,39 @@
-import { usePIIDetector } from './usePIIDetector.js'
-import { generateReplacement } from '../utils/replacements.js'
+import { usePIIDetector } from './usePIIDetector'
+import { generateReplacement } from '@/utils/replacements'
 
-export const useDataMasking = () => {
+interface DetectedItem {
+  type: string;
+  field?: string;
+  value: string;
+  masked: string;
+}
+
+interface MaskingResult {
+  maskedData: any;
+  detected: DetectedItem[];
+  replacementCount: number;
+}
+
+interface ReplacedRange {
+  start: number;
+  end: number;
+}
+
+interface DataMaskingReturn {
+  smartMaskData: (data: any, strategy?: string) => MaskingResult;
+  processAsText: (input: string, outputFormat: string) => MaskingResult;
+  processAsCSV: (input: string, outputFormat: string) => MaskingResult;
+}
+
+export const useDataMasking = (): DataMaskingReturn => {
   const { isSensitiveFieldName, detectDataType, patterns } = usePIIDetector()
 
   // Smart JSON masking function
-  const smartMaskData = (data, strategy = 'types') => {
-    const detected = []
+  const smartMaskData = (data: any, strategy: string = 'types'): MaskingResult => {
+    const detected: DetectedItem[] = []
     let replacementCount = 0
 
-    const processValue = (obj, key, path = '') => {
+    const processValue = (obj: any, key: string, path: string = ''): void => {
       const value = obj[key]
       const fullPath = path ? `${path}.${key}` : key
       
@@ -20,7 +44,7 @@ export const useDataMasking = () => {
         
         if (isSensitiveField || dataType) {
           const type = dataType || 'sensitive'
-          const replacement = generateReplacement(value, type, strategy, key)
+          const replacement = generateReplacement(value, type, strategy)
           
           detected.push({
             type: type.toUpperCase(),
@@ -35,7 +59,7 @@ export const useDataMasking = () => {
       } else if (typeof value === 'number') {
         // Check if it's a coordinate or suspicious ID
         if (key.toLowerCase().includes('coord') || key.toLowerCase().includes('lat') || key.toLowerCase().includes('lon')) {
-          const replacement = generateReplacement(value.toString(), 'coordinate', strategy, key)
+          const replacement = generateReplacement(value.toString(), 'coordinate', strategy)
           detected.push({
             type: 'COORDINATE',
             field: fullPath,
@@ -46,7 +70,7 @@ export const useDataMasking = () => {
           replacementCount++
         }
       } else if (Array.isArray(value)) {
-        value.forEach((item, index) => {
+        value.forEach((item: any, index: number) => {
           if (typeof item === 'object' && item !== null) {
             Object.keys(item).forEach(subKey => {
               processValue(item, subKey, `${fullPath}[${index}]`)
@@ -54,7 +78,7 @@ export const useDataMasking = () => {
           } else if (typeof item === 'string') {
             const dataType = detectDataType(item, key)
             if (dataType) {
-              const replacement = generateReplacement(item, dataType, strategy, key)
+              const replacement = generateReplacement(item, dataType, strategy)
               detected.push({
                 type: dataType.toUpperCase(),
                 field: `${fullPath}[${index}]`,
@@ -90,8 +114,8 @@ export const useDataMasking = () => {
   }
 
   // Helper function for text processing
-  const processAsText = (input, outputFormat) => {
-    const detected = []
+  const processAsText = (input: string, outputFormat: string): MaskingResult => {
+    const detected: DetectedItem[] = []
     let replacementCount = 0
 
     // Split into lines and process each
@@ -108,7 +132,7 @@ export const useDataMasking = () => {
         
         if (dataType || isSensitiveField) {
           const type = dataType || 'sensitive'
-          const replacement = generateReplacement(value.trim(), type, outputFormat, key.trim())
+          const replacement = generateReplacement(value.trim(), type, outputFormat)
           
           detected.push({
             type: type.toUpperCase(),
@@ -121,7 +145,7 @@ export const useDataMasking = () => {
         }
       } else {
         // Track what's been replaced to avoid double replacement
-        let replacedRanges = []
+        let replacedRanges: ReplacedRange[] = []
         
         // Check for standalone patterns in priority order
         const patternOrder = [
@@ -136,7 +160,7 @@ export const useDataMasking = () => {
             const matches = [...processedLine.matchAll(pattern)]
             matches.forEach(match => {
               const original = match[0]
-              const startIndex = match.index
+              const startIndex = match.index || 0
               const endIndex = startIndex + original.length
               
               // Check if this range overlaps with already replaced text
@@ -173,11 +197,11 @@ export const useDataMasking = () => {
   }
 
   // Helper function for CSV processing
-  const processAsCSV = (input, outputFormat) => {
+  const processAsCSV = (input: string, outputFormat: string): MaskingResult => {
     const lines = input.split('\n').filter(line => line.trim())
     if (lines.length === 0) return processAsText(input, outputFormat)
     
-    const detected = []
+    const detected: DetectedItem[] = []
     let replacementCount = 0
     
     // Process header row
@@ -195,7 +219,7 @@ export const useDataMasking = () => {
         
         if (dataType || isSensitiveField) {
           const type = dataType || 'sensitive'
-          const replacement = generateReplacement(value, type, outputFormat, header)
+          const replacement = generateReplacement(value, type, outputFormat)
           
           detected.push({
             type: type.toUpperCase(),

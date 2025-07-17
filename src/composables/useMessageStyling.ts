@@ -1,9 +1,20 @@
-import { computed } from 'vue'
+import { computed, type Ref, type ComputedRef, type Component } from 'vue'
 import { AlertTriangle, CheckCircle } from 'lucide-vue-next'
 
-export const useMessageStyling = (errorMessage) => {
+type MessageType = 'error' | 'warning' | 'info' | 'default'
+
+interface MessageStylingReturn {
+  messageStyle: ComputedRef<string>;
+  messageIcon: ComputedRef<Component>;
+  iconColor: ComputedRef<string>;
+  titleColor: ComputedRef<string>;
+  messageColor: ComputedRef<string>;
+  messageTitle: ComputedRef<string>;
+}
+
+export const useMessageStyling = (errorMessage: Ref<string>): MessageStylingReturn => {
   // Determine message type based on content
-  const getMessageType = () => {
+  const getMessageType = (): MessageType => {
     if (!errorMessage.value) return 'info'
     
     const message = errorMessage.value.toLowerCase()
@@ -17,7 +28,7 @@ export const useMessageStyling = (errorMessage) => {
   }
 
   // Computed properties for dynamic styling
-  const messageStyle = computed(() => {
+  const messageStyle = computed((): string => {
     const type = getMessageType()
     switch (type) {
       case 'error':
@@ -31,7 +42,7 @@ export const useMessageStyling = (errorMessage) => {
     }
   })
 
-  const messageIcon = computed(() => {
+  const messageIcon = computed((): Component => {
     const type = getMessageType()
     switch (type) {
       case 'error':
@@ -45,7 +56,7 @@ export const useMessageStyling = (errorMessage) => {
     }
   })
 
-  const iconColor = computed(() => {
+  const iconColor = computed((): string => {
     const type = getMessageType()
     switch (type) {
       case 'error':
@@ -59,7 +70,7 @@ export const useMessageStyling = (errorMessage) => {
     }
   })
 
-  const titleColor = computed(() => {
+  const titleColor = computed((): string => {
     const type = getMessageType()
     switch (type) {
       case 'error':
@@ -73,7 +84,7 @@ export const useMessageStyling = (errorMessage) => {
     }
   })
 
-  const messageColor = computed(() => {
+  const messageColor = computed((): string => {
     const type = getMessageType()
     switch (type) {
       case 'error':
@@ -87,7 +98,7 @@ export const useMessageStyling = (errorMessage) => {
     }
   })
 
-  const messageTitle = computed(() => {
+  const messageTitle = computed((): string => {
     const type = getMessageType()
     switch (type) {
       case 'error':

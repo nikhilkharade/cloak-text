@@ -253,9 +253,9 @@ import {
 } from 'lucide-vue-next'
 
 // Import composables
-import { useDataMasking } from './composables/useDataMasking.js'
-import { useInputDetection } from './composables/useInputDetection.js'
-import { useMessageStyling } from './composables/useMessageStyling.js'
+import { useDataMasking } from './composables/useDataMasking'
+import { useInputDetection } from './composables/useInputDetection'
+import { useMessageStyling } from './composables/useMessageStyling'
 
 // Reactive state
 const inputData = ref('')

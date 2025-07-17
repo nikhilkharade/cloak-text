@@ -1,7 +1,17 @@
+import type { InputFormat } from '@/types'
+
+type DetectedType = InputFormat | 'malformed-json' | 'key-value'
+
+interface InputDetectionReturn {
+  detectInputType: (input: string) => DetectedType;
+  generateErrorMessage: (detectedType: DetectedType) => string;
+  handleProcessingError: (error: Error) => string;
+}
+
 // Input type detection and error handling
-export const useInputDetection = () => {
+export const useInputDetection = (): InputDetectionReturn => {
   // Enhanced input type detection
-  const detectInputType = (input) => {
+  const detectInputType = (input: string): DetectedType => {
     // Check for JSON
     if ((input.startsWith('{') && input.endsWith('}')) || 
         (input.startsWith('[') && input.endsWith(']'))) {
@@ -38,19 +48,23 @@ export const useInputDetection = () => {
   }
 
   // Generate user-friendly error messages
-  const generateErrorMessage = (detectedType) => {
-    const messages = {
+  const generateErrorMessage = (detectedType: DetectedType): string => {
+    const messages: Record<DetectedType, string> = {
       'malformed-json': 'Your JSON has a formatting issue. Common fixes: add missing quotes around text, check for extra/missing commas, and ensure all brackets are closed properly.',
       'xml': 'XML format detected! We\'re processing it as plain text for now. Full XML support is coming soon.',
       'yaml': 'YAML format detected! We\'re processing it as plain text for now. Full YAML support is coming soon.',
-      'csv': 'CSV format detected! Processing your data with smart header recognition.'
+      'csv': 'CSV format detected! Processing your data with smart header recognition.',
+      'json': '',
+      'text': '',
+      'unknown': '',
+      'key-value': ''
     }
     
     return messages[detectedType] || ''
   }
 
   // Handle processing errors with user-friendly messages
-  const handleProcessingError = (error) => {
+  const handleProcessingError = (error: Error): string => {
     let friendlyMessage = ''
     
     if (error.message.includes('JSON')) {

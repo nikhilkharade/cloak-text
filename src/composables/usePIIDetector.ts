@@ -1,7 +1,18 @@
+interface PIIPatterns {
+  [key: string]: RegExp;
+}
+
+interface PIIDetectorReturn {
+  sensitiveFields: string[];
+  patterns: PIIPatterns;
+  isSensitiveFieldName: (fieldName: string) => boolean;
+  detectDataType: (value: string, fieldName?: string) => string | null;
+}
+
 // Smart PII Detection System
-export const usePIIDetector = () => {
+export const usePIIDetector = (): PIIDetectorReturn => {
   // Sensitive field names (case insensitive)
-  const sensitiveFields = [
+  const sensitiveFields: string[] = [
     'name', 'firstname', 'lastname', 'fullname', 'displayname', 'username', 'messagingname',
     'email', 'mail', 'emailaddress',
     'phone', 'phonenumber', 'mobile', 'tel', 'telephone',
@@ -17,7 +28,7 @@ export const usePIIDetector = () => {
   ]
 
   // Patterns for different data types
-  const patterns = {
+  const patterns: PIIPatterns = {
     email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/gi,
     phone: /(?:\+\d{1,3}[-.\s]?)?\(?([0-9]{3})\)?[-.\s]?([0-9]{3})[-.\s]?([0-9]{4})\b/g,
     uuid: /\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/gi,
@@ -41,7 +52,7 @@ export const usePIIDetector = () => {
   }
 
   // Check if a field name suggests sensitive data
-  const isSensitiveFieldName = (fieldName) => {
+  const isSensitiveFieldName = (fieldName: string): boolean => {
     const lowerField = fieldName.toLowerCase()
     return sensitiveFields.some(sensitive => 
       lowerField.includes(sensitive) || sensitive.includes(lowerField)
@@ -49,7 +60,7 @@ export const usePIIDetector = () => {
   }
 
   // Detect what type of data this looks like
-  const detectDataType = (value, fieldName = '') => {
+  const detectDataType = (value: string, fieldName: string = ''): string | null => {
     if (typeof value !== 'string') return null
     
     const lowerField = fieldName.toLowerCase()
