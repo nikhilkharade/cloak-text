@@ -215,11 +215,7 @@ The built files in `dist/` can be deployed to any static hosting service:
 - AWS S3
 - Firebase Hosting
 
-## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/nikhilkharade/cloak-text/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/nikhilkharade/cloak-text/discussions)
-- **Email**: [your-email@domain.com]
 
 ---
 
