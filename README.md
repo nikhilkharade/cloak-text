@@ -32,8 +32,8 @@ Cloak is a modern web application that intelligently detects and masks personall
 
 ## 🚀 Quick Start
 
-### Online Usage
-Visit the live application at: [Your deployed URL here]
+### 🎬 Interactive Demo
+Try Cloak instantly with our interactive demo: [**Live Demo on Supademo**](https://app.supademo.com/demo/cmd7uruvm7crsc4kj9dx98gv6?v_email=EMAIL)
 
 ### Local Development
 
@@ -54,7 +54,7 @@ Visit the live application at: [Your deployed URL here]
    ```
 
 4. **Open in browser**
-   Navigate to `http://localhost:3000` (or the port shown in terminal)
+   Navigate to `http://localhost:3001` (or the port shown in terminal)
 
 ## 📝 Usage Examples
 
