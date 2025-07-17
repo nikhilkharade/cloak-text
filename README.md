@@ -33,7 +33,11 @@ Cloak is a modern web application that intelligently detects and masks personall
 ## 🚀 Quick Start
 
 ### 🎬 Interactive Demo
-Try Cloak instantly with our interactive demo: [**Live Demo on Supademo**](https://app.supademo.com/demo/cmd7uruvm7crsc4kj9dx98gv6?v_email=EMAIL)
+Try Cloak instantly with our interactive demo:
+
+![Cloak Demo](2025-07-17,%2008_40_21%20p.m.-Clock_Text.gif)
+
+*Watch how Cloak intelligently detects and masks sensitive data in real-time*
 
 ### Local Development
 
